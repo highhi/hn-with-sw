@@ -36,11 +36,15 @@ gulp.task('build-scss', function() {
 gulp.task( 'build-js', function() {
   var browserify = require('browserify');
   var babelify   = require('babelify');
+  var watchify   = require('watchify');
   var source     = require('vinyl-source-stream');
   var buffer     = require('vinyl-buffer');
   var uglify     = require('gulp-uglify');
 
   return browserify({
+    cache: {},
+    packageCache: {},
+    plugin: [watchify],
     entries : [DIR_SRC + '/js/index.js'],
     debug   : true
   })
@@ -59,12 +63,12 @@ gulp.task('generate-service-worker', function(callback) {
   var swPrecache = require('sw-precache');
   var config = {
     cacheId: pk.name,
-    importScripts: ['./sw-push.js'],
     runtimeCaching: [{
       urlPattern: /^https:\/\/hn\.algolia\.com\/api/,
-      handler: 'networkFirst',
+      handler: 'fastest',
       options: {
         cache: {
+          maxEntries: 2,
           name: 'hn-list-cache'
         }
       }

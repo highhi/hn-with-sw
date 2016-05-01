@@ -1,60 +1,40 @@
 import 'whatwg-fetch';
+import 'babel-polyfill';
 import moment from 'moment';
 import util from './util';
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').then(function() {
+  navigator.serviceWorker.register('./sw.js').then(() => {
     console.log('Service Worker Registered');
   });
 }
 
-const api = 'https://hn.algolia.com/api/v1/search_by_date?tags=story&hitsPerPage=50';
-const lsit = util.el('list');
-const hasCaches = 'caches' in window;
-
-function makeHnListItem(data) {
+const makeHnListItem = (item) => {
   return `
     <article class="List__item Item">
       <h1 class="Item__title">
-        <a href="${ data.url }" target="_blank">${ data.title }</a>
+        <a href="${ item.url }" target="_blank">${ item.title }</a>
       </h1>
       <ul class="Item__infos Infos">
-        <li class="Infos__item">${ data.points } points</li>
-        <li class="Infos__item">by ${ data.author }</li>
-        <li class="Infos__item">${ data.num_comments } comments</li>
-        <li class="Infos__item">${ data.created_at }</li>
+        <li class="Infos__item">${ item.points } points</li>
+        <li class="Infos__item">by ${ item.author }</li>
+        <li class="Infos__item">${ item.num_comments } comments</li>
+        <li class="Infos__item">${ moment(item.created_at, 'YYYYMMDD').fromNow() }</li>
       </ul>
     </article>
   `;
 }
 
-function makeHnListFromCache() {
-  if (!hasCaches) return;
+const makeHnList = async (list, url) => {
+  const response = await fetch(url).catch((ex) => console.log('parsing failed', ex));
+  const json = await response.json();
 
-  caches.match(api).then((response) => {
-    if (!response) return;
-
-    response.json().then((json) => {
-      json.hits.forEach((item) => {
-        list.insertAdjacentHTML('beforeend', makeHnListItem(item));
-      });
-    });
+  json.hits.forEach((item) => {
+    list.insertAdjacentHTML('beforeend', makeHnListItem(item));
   });
 }
 
-function makeHnList() {
-  makeHnListFromCache();
+const list = util.el('list');
+const REQ_URL = 'https://hn.algolia.com/api/v1/search_by_date?tags=story&hitsPerPage=50';
 
-  fetch(api).then((response) => {
-    return response.json()
-  }).then((json) => {
-    console.log(json.hits);
-    json.hits.forEach((item) => {
-      list.insertAdjacentHTML('beforeend', makeHnListItem(item));
-    })
-  }).catch((ex) => {
-    console.log('parsing failed', ex)
-  });
-}
-
-makeHnList();
+makeHnList(list, REQ_URL);
