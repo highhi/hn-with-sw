@@ -1,6 +1,6 @@
-//
-// Base
-// --------------------------------------------------
+:root {
+  --root-font-size: 62.5%;
+}
 
 * {
   box-sizing: border-box;
@@ -11,23 +11,24 @@ html, body {
 }
 
 html {
-  font-size: $rootFontSize;
+  font-size: var(--root-font-size);
 }
 
 body {
-  background-color: $bgColor;
-  font-family: $fontEn;
+  background-color: #f6f6ef;
+  font-family: Helvetica, Arial, sans-serif;
   font-size: 1.3em;
-  line-height: $lineHeight;
-  color: $fontColor;
+  line-height: 1.6;
+  color: #333;
   text-rendering: optimizeLegibility;
 }
 
 a {
   text-decoration: none;
-  &:hover {
-    text-decoration: underline
-  }
+}
+
+a:hover {
+  text-decoration: underline
 }
 
 .Header {
