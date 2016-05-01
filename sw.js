@@ -83,7 +83,7 @@ Cache.prototype.addAll||(Cache.prototype.addAll=function(t){function e(t){this.n
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["css/style.css","ffcfd10c478c53dc5e8c0057a934119a"],["index.html","c75ec4e4237a206ba1ca5387c40d4435"],["js/bundle.js","b93b8663d6f37b4319027574338511af"]];
+var PrecacheConfig = [["./dist/css/style.css","ab17ee756491c80fa455b3b74ce453b9"],["./dist/js/bundle.js","55559a9b0013f6fcb5c8855f4f8f15c5"],["./index.html","5b0e448bc72e57a14f3283a63d3e4d61"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1-hn-with-sw-' + (self.registration ? self.registration.scope : '') + '-';
 
